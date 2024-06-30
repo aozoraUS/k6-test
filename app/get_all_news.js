@@ -3,8 +3,6 @@ import { check } from "k6";
 import http from "k6/http";
 import { group, sleep } from "k6";
 
-const backend_base_url = "http://localhost:8000";
-
 // define configuration
 export const options = {
   // define thresholds
@@ -37,7 +35,7 @@ export default function () {
       },
     };
 
-    const res = http.get(backend_base_url + "/news", params);
+    const res = http.get(`${__ENV.BACKEND_BASE_URL}/news`, params);
     sleep(1);
 
     // check that response is 200

@@ -3,15 +3,19 @@ import { check } from "k6";
 import http from "k6/http";
 import { group, sleep } from "k6";
 
+/*
+引数
+BACKEND_BASE_URL
+GROUP_ID
+EVENT_ID
+USER_ID
+USER_TOKEN
+*/
+
 // define configuration
 export const options = {
-  // define thresholds
-  thresholds: {
-    http_req_failed: [{ threshold: "rate<0.01", abortOnFail: true }], // availability threshold for error rate
-    http_req_duration: ["p(99)<1000"], // Latency threshold for percentile
-  },
-
   // define scenarios
+  /*
   scenarios: {
     breaking: {
       executor: "ramping-vus",
@@ -25,31 +29,28 @@ export const options = {
       ],
     },
   },
+  */
 };
 
 export default function () {
   // define URL and request body
-  group("配布状況の確認", function () {
+  group("front /index", function () {
     const params = {
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${__ENV.USER_TOKEN}`,
       },
     };
 
-    const groups = http.get(`${__ENV.BACKEND_BASE_URL}/groups`).json();
-
-    for (let i = 0; i < groups.length; i++) {
-      const res = http.get(
-        `${__ENV.BACKEND_BASE_URL}/groups/${groups[i].id}/events/`,
-        params
-      );
-
-      // check that response is 200
-      check(res, {
-        "response code was 200": (res) => res.status == 200,
-      });
-    }
-
+    const res = http.post(
+      `${__ENV.BACKEND_BASE_URL}/groups/${__ENV.GROUP_ID}/events/${__ENV.EVENT_ID}/tickets`,
+      params
+    );
     sleep(1);
+
+    // check that response is 200
+    check(res, {
+      "response code was 200": (res) => res.status == 200,
+    });
   });
 }
