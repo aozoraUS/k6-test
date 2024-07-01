@@ -8,7 +8,6 @@ import { group, sleep } from "k6";
 BACKEND_BASE_URL
 GROUP_ID
 EVENT_ID
-USER_ID
 USER_TOKEN
 */
 
@@ -35,17 +34,17 @@ export const options = {
 export default function () {
   // define URL and request body
   group("front /index", function () {
-    const params = {
+    const options = {
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${__ENV.USER_TOKEN}`,
       },
     };
 
     const res = http.post(
       `${__ENV.BACKEND_BASE_URL}/groups/${__ENV.GROUP_ID}/events/${__ENV.EVENT_ID}/tickets`,
-      params
+      options
     );
+    console.log();
     sleep(1);
 
     // check that response is 200
