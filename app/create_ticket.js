@@ -14,37 +14,34 @@ USER_TOKEN
 // define configuration
 export const options = {
   // define scenarios
-  /*
   scenarios: {
     breaking: {
       executor: "ramping-vus",
       stages: [
-        { duration: "10s", target: 5 },
-        { duration: "50s", target: 10 },
-        { duration: "50s", target: 15 },
-        { duration: "50s", target: 20 },
-        { duration: "50s", target: 30 },
+        { duration: "20s", target: 4000 },
         //....
       ],
     },
   },
-  */
 };
 
 export default function () {
   // define URL and request body
   group("front /index", function () {
-    const options = {
+    const payload = JSON.stringify({});
+
+    const params = {
       headers: {
+        "content-type": "application/json",
         Authorization: `Bearer ${__ENV.USER_TOKEN}`,
       },
     };
 
     const res = http.post(
-      `${__ENV.BACKEND_BASE_URL}/groups/${__ENV.GROUP_ID}/events/${__ENV.EVENT_ID}/tickets`,
-      options
+      `${__ENV.BACKEND_BASE_URL}/spectest/groups/${__ENV.GROUP_ID}/events/${__ENV.EVENT_ID}/tickets`,
+      payload,
+      params
     );
-    console.log();
     sleep(1);
 
     // check that response is 200

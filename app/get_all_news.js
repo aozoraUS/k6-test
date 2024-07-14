@@ -15,11 +15,8 @@ export const options = {
     breaking: {
       executor: "ramping-vus",
       stages: [
-        { duration: "10s", target: 5 },
-        { duration: "50s", target: 10 },
-        { duration: "50s", target: 15 },
-        { duration: "50s", target: 20 },
-        { duration: "50s", target: 30 },
+        { duration: "50s", target: 1000 },
+        { duration: "50s", target: 2000 },
         //....
       ],
     },
